@@ -1,4 +1,4 @@
-# inclinometers
+# inclinometers -- system still in progress
 Inclinometer / accelerometer system for measuring inclination angle and tuning motors. Please use file 'UDPsocket_inclinometer.py' as this is the script that will automatically name files. If it does not run properly, resort to 'Backup_UDPsocket.py', which is the original (tested) version.
 
 ![Deep Learning-11 2](https://github.com/user-attachments/assets/25a91a8b-a0da-4dc1-b8b6-8d3bf5477a1d)
