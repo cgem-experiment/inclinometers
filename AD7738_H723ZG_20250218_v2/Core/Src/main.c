@@ -711,18 +711,6 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 		spiData[spiIndex + 14] = 0xAB89; // 16 bit spacer
 		spiData[spiIndex + 15] = 0xEFCD; // 16 bit spacer (two are necessary due to timer23val being 32 bit -- all 16 bit values are eventually covered)
 
-
-//		spiData[spiIndex] = value1 & 0xFFFF; // value1
-//		spiData[spiIndex + 1] = (value1 >> 16) & 0xFFFF; // value2
-//		spiData[spiIndex + 2] = value6 & 0xFFFF; // value3
-//		spiData[spiIndex + 3] = (value6 >> 16) & 0xFFFF; //ch1_status
-//		spiData[spiIndex + 4] = ch1_status; //ch2_status
-//		spiData[spiIndex + 5] = ch6_status; //ch3_status
-//		spiData[spiIndex + 6] = (timer23val & 0xFFFF);
-//		spiData[spiIndex + 7] = (timer23val >> 16) & 0xFFFF;
-//		spiData[spiIndex + 8] = 0xAB89; // 16 bit spacer
-//		spiData[spiIndex + 9] = 0xEFCD; // 16 bit spacer (two are necessary due to timer23val being 32 bit -- all 16 bit values are eventually covered)
-
 		spiIndex = spiIndex + 16;
 
 		if (spiIndex >= 740) {
@@ -832,27 +820,24 @@ void startEthernetTask(void const * argument)
 	udp_connect(my_udp, &PC_IPADDR, 55151);
 	struct pbuf* udp_buffer = NULL;
 
-//	// Set PG12 to high to select 'transmit' on Arduino RS422 shield
-//	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_12, 1);
-
-	/* Start Timer 5 */
+	// Start timer 23
 	HAL_TIM_Base_Start(&htim23);
+
+	// Start timer 1
 	HAL_TIM_Base_Start(&htim1);
 
-	// Start Timer 2 with 1ms interrupts
+	// Start timer 2 with 1ms interrupts
 	HAL_TIM_Base_Start_IT(&htim2);
 
 	initializeA7738Board();
 
 	for(;;)
 	{
-//	  osDelay(1);
 	  // Wait for the notification to send data
 	  ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
 	  // Copy samples from spiData to tempBuffer
 	  memcpy(tempBuffer, spiData, sizeof(tempBuffer));
-
 
 	  // Send the data over Ethernet
 	  udp_buffer = pbuf_alloc(PBUF_TRANSPORT, sizeof(tempBuffer), PBUF_RAM);
